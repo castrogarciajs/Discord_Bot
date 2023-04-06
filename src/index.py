@@ -6,18 +6,11 @@ from discord.ext import commands
 # Read variable
 load_dotenv()
 
-token = os.getenv('TOKEN')
+token: str = os.getenv('TOKEN')
 
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 
-# Intents
-intents.members = True
-intents.messages = True
-intents.dm_messages = True
-intents.guilds = True
-intents.guild_messages = True
-
-bot = commands.Bot(command_prefix='>', description='Bot Helper Bot',intents=intents)
+bot = commands.Bot(command_prefix='$ ', description='Bot Helper Bot',intents=intents)
 
 @bot.command()
 async def init(ctx):
@@ -35,6 +28,9 @@ async def on_ready():
     await bot.change_presence(activity=discord.Streaming(name='Example', url='http://www.twitch.tv/accountname'))
     print('My Bot On ready')
 
-bot.run(token)
+try:
+    bot.run(token)
+    print("Hello World Discord !")
+except discord.errors.LoginFailure as error:
+    print(error)   
 
-print("Hello World Discord !")
