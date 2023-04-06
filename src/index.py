@@ -1,6 +1,8 @@
 import discord
 import os
+import re
 import datetime
+from urllib import parse, request
 from dotenv import load_dotenv
 from discord.ext import commands
 
@@ -37,6 +39,14 @@ async def stats(ctx):
     embed.set_image(url=f"{ctx.guild.icon}")
     
     await ctx.send(embed=embed)
+
+
+@bot.command()
+async def youtube(ctx,*,search):
+    query = parse.urlencode({'search_query': search})
+    html_content = request.urlopen(f'https://www.youtube.com/results?={query}')
+    search_results = re.findall('href=\"\\/watch\\?v=(.{11})', html_content.read().decode())
+    await ctx.send('https://www.youtube.com/watch?v=' + search_results[0])
 
 # Event
 
